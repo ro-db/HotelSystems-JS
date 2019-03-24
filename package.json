@@ -1,0 +1,16 @@
+{
+  "name": "hotel-systems",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "consolidate": "^0.15.1",
+    "express": "^4.16.4",
+    "mustache": "^3.0.1"
+  }
+}
