@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const { Client } = require('pg');
 require('dotenv').config();
+const pg = require('pg');
 
 var engines = require('consolidate');
 
@@ -11,20 +12,22 @@ var PORT = process.env.PORT || 3000;
 
 // Create client
 const client = new Client({
-  // user: process.env.USER,
-  // host: process.env.HOST,
-  // database: process.env.DATABASE,
-  // password: process.env.PASSWORD,
-  // port: process.env.DBPORT
-  user: '',
-  host: '',
-  database: '',
-  schema: '',
-  password: '',
-  port: 
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT
 });
 
-// Connecting to client (db)
+client.connect(err => {
+  if (err) {
+    console.error('client connection error', err.stack);
+  } else {
+    console.log('Database connection SUCCESSFUL');
+  }
+});
+
+// Connects to client
 function connectClient() {
   client.connect(err => {
     if (err) {
@@ -45,8 +48,8 @@ app.get('/employees', function(req, res, next) {
       result => res.status(200).send(result[1].rows)
     )
     .catch(e => console.error(e.stack))
-    .then(() => client.end());
-  console.log('Closed client connection');
+    .then(() => client.end())
+    .then(() => console.log('Closed client connection'));
 });
 
 // Set app engine
