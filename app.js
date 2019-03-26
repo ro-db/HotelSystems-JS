@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { Client, Pool } = require('pg');
+const { Client } = require('pg');
 require('dotenv').config();
 
 var engines = require('consolidate');
@@ -9,26 +9,44 @@ var engines = require('consolidate');
 const app = express();
 var PORT = process.env.PORT || 3000;
 
-// Create connection
-const connectionString = process.env.CONNECTION_STRING;
-
-const pool = new Pool({
-  connectionString: connectionString
-});
-
-pool.query('SELECT NOW()', (err, res) => {
-  console.log(err, res);
-  pool.end();
-});
-
+// Create client
 const client = new Client({
-  connectionString: connectionString
+  // user: process.env.USER,
+  // host: process.env.HOST,
+  // database: process.env.DATABASE,
+  // password: process.env.PASSWORD,
+  // port: process.env.DBPORT
+  user: '',
+  host: '',
+  database: '',
+  schema: '',
+  password: '',
+  port: 
 });
-client.connect();
 
-client.query('SELECT NOW()', (err, res) => {
-  console.log(err, res);
-  client.end();
+// Connecting to client (db)
+function connectClient() {
+  client.connect(err => {
+    if (err) {
+      console.error('client connection error', err.stack);
+    } else {
+      console.log('Database connection SUCCESSFUL');
+    }
+  });
+}
+
+// get employees
+app.get('/employees', function(req, res, next) {
+  connectClient();
+  client
+    .query('SET search_path = "HotelSystem"; SELECT * FROM employee;')
+    .then(
+      // result => console.log(result[1].rows),
+      result => res.status(200).send(result[1].rows)
+    )
+    .catch(e => console.error(e.stack))
+    .then(() => client.end());
+  console.log('Closed client connection');
 });
 
 // Set app engine
