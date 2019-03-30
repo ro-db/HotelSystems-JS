@@ -21,6 +21,7 @@
     "node-calendar": "^0.1.5",
     "nodemon": "^1.18.10",
     "pg": "^7.9.0",
+    "pg-promise": "^8.6.4",
     "prop-types": "^15.7.2",
     "react": "^16.8.5",
     "react-dates": "^20.1.0",

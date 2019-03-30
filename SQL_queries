@@ -1,0 +1,184 @@
+SET search_path = "HotelSystem";
+
+CREATE TABLE hotel_chain ( hotel_chain_id INT PRIMARY KEY, 
+						  number_of_hotels INT,
+						  address VARCHAR,
+						  phone_number CHAR(15),
+						  email VARCHAR(50)
+						 );
+						 
+CREATE TABLE hotel(hotel_id INT PRIMARY KEY,
+				  hotel_chain_id INT, FOREIGN KEY (hotel_chain_id) REFERENCES hotel_chain(hotel_chain_id),
+				  number_of_rooms INT,
+				  phone_number CHAR(10),
+				  address VARCHAR,
+				  email VARCHAR(50),
+				  stars INT CONSTRAINT STARTS_CHECK check(stars >= 1 AND stars <= 5)
+				  );
+
+CREATE TABLE room(room_number INT PRIMARY KEY,
+				  price INT,
+				  amenities TEXT,
+				  capacity INT,
+				  room_view TEXT,
+				  extendable BIT, 
+				  issues TEXT,
+          hotel_id INT, FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id);
+				  );
+
+CREATE TABLE customer(SIN INT PRIMARY KEY,
+					  full_name VARCHAR,
+					  address VARCHAR
+					 );
+
+CREATE TABLE employee(employee_id INT PRIMARY KEY,
+					  full_name VARCHAR,
+					  role_pos VARCHAR
+					 );
+
+CREATE TABLE booking (booking_id INT PRIMARY KEY, 
+					  booking_date DATE,
+					  price INT
+					 );
+
+CREATE TABLE rental ( rental_id INT PRIMARY KEY,
+					 price INT,
+					 start_date DATE,
+					 end_date DATE CONSTRAINT check_dates check (start_date < end_date)
+					);
+
+ALTER TABLE hotel_chain ALTER COLUMN phone_number TYPE CHAR(10); 
+
+--HOTEL CHAINS
+INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address, phone_number, email)
+	VALUES (01, 09, '800 Augusta St.Troy, NY 12180','9208901010', 'augusta@mail.com' ),
+	VALUES (02, 09, '800 Augusta St.Troy, NY 12180','9208901010', 'augusta@mail.com' ),
+	VALUES (03, 09, '800 Augusta St.Troy, NY 12180','9208901010', 'augusta@mail.com' ),
+	VALUES (04, 09, '800 Augusta St.Troy, NY 12180','9208901010', 'augusta@mail.com' ),
+	VALUES (05, 09, '800 Augusta St.Troy, NY 12180','9208901010', 'augusta@mail.com' );
+
+-- HOTEL CHAIN 1
+INSERT INTO hotel (hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars) 
+    VALUES 
+        (01,01, 20, '4039522220', '7611 Highland Dr.Mishawaka, IN 46544', 'highland@mail.com', 3),
+        (02,01, 10, '4322825892', '745 Cambridge RoadGoldsboro, NC 27530', 'cambridge@mail.com', 3),
+        (03,01, 15, '5905888458', '108 Washington St.Logansport, IN 46947', 'washington@mail.com', 3),
+        (04,01, 10, '5574078387', '413 Market Dr.Dundalk, MD 21222', 'market@mail.com', 5),
+        (05,01, 18, '2146761030', '9055 Edgefield StreetValdosta, GA 31601', 'edgefield@mail.com', 4),
+        (06,01, 40, '8039610396', '69 Ridge RoadBloomfield, NJ 07003', 'ridgeroad@mail.com', 5),
+        (07,01, 23, '5009097335', '8991 10th Avenue Warwick, RI 02886', 'avenuewarwick@mail.com', 2),
+        (08,01, 29, '2966966254', '48 Ann Street Ft Mitchell, KY 41017', 'streetmitchel@mail.com', 1),
+        (09,01, 18, '9208968883', '750 Augusta St.Troy, NY 12180', 'augusta@mail.com', 2);
+
+--ROOMS HOTEL CHAIN 1
+INSERT INTO room (room_number, price, amenities, capacity, room_view, extendable, issues, hotel_id)
+  VALUES 
+  --ROOMS HOTEL 1
+    (01, 150, 'king size beds, big bath', 6, 'beach', 0, 'none', 01),
+    (01, 250, 'free snacks, outdoor jacuzi', 5, 'beach', 0, 'loud fan', 01),
+    (01, 1600, 'big balcony', 2, 'beach', 8, 'wall paint falling', 01),
+    (01, 100, '80" 40K TV', 2, 'beach', 4, 'none', 01),
+    (01, 300, 'triple foam bed, big TV', 2, 'beach', 2, 'none', 01),
+  --ROOMS HOTEL 2
+    (02, 50, 'king size bed, big bath', 1, 'beach', 0, 'none', 01),
+    (02, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (02, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (02, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (02, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+  --ROOMS HOTEL 3
+    (03, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (03, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (03, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (03, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (03, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+  --ROOMS HOTEL 4
+    (04, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (04, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (04, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (04, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (04, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+  --ROOMS HOTEL 5
+    (05, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (05, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (05, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (05, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (05, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    --ROOMS HOTEL 6
+    (06, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (06, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (06, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (06, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (06, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+  --ROOMS HOTEL 7
+    (07, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (07, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (07, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (07, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (07, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+  --ROOMS HOTEL 8
+    (08, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (08, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (08, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (08, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (08, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+  --ROOMS HOTEL 9
+    (09, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (09, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (09, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (09, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01),
+    (09, 50, 'king size bed, big bath', 2, 'beach', 0, 'none', 01);
+
+
+    
+
+-- HOTEL CHAIN 2
+INSERT INTO hotel (hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars) 
+    VALUES 
+        (01,02, 20, '4039522220', '7611 Highland Dr.Mishawaka, IN 46544', 'highland@mail.com', 3),
+        (02,02, 10, '4322825892', '745 Cambridge RoadGoldsboro, NC 27530', 'cambridge@mail.com', 3),
+        (03,02, 15, '5905888458', '108 Washington St.Logansport, IN 46947', 'washington@mail.com', 3),
+        (04,02, 10, '5574078387', '413 Market Dr.Dundalk, MD 21222', 'market@mail.com', 5),
+        (05,02, 18, '2146761030', '9055 Edgefield StreetValdosta, GA 31602', 'edgefield@mail.com', 4),
+        (06,02, 40, '8039610396', '69 Ridge RoadBloomfield, NJ 07003', 'ridgeroad@mail.com', 5),
+        (07,02, 23, '5009097335', '8991 10th Avenue Warwick, RI 02886', 'avenuewarwick@mail.com', 2),
+        (08,02, 29, '2966966254', '48 Ann Street Ft Mitchell, KY 41027', 'streetmitchel@mail.com', 1),
+        (09,02, 18, '9208968883', '750 Augusta St.Troy, NY 12180', 'augusta@mail.com', 2);
+
+-- HOTEL CHAIN 3
+INSERT INTO hotel (hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars) 
+    VALUES 
+        (01,03, 20, '4039522220', '7611 Highland Dr.Mishawaka, IN 46544', 'highland@mail.com', 3),
+        (02,03, 10, '4322825892', '745 Cambridge RoadGoldsboro, NC 27530', 'cambridge@mail.com', 3),
+        (03,03, 15, '5905888458', '108 Washington St.Logansport, IN 46947', 'washington@mail.com', 3),
+        (04,03, 10, '5574078387', '413 Market Dr.Dundalk, MD 21222', 'market@mail.com', 5),
+        (05,03, 18, '2146761030', '9055 Edgefield StreetValdosta, GA 31603', 'edgefield@mail.com', 4),
+        (06,03, 40, '8039610396', '69 Ridge RoadBloomfield, NJ 07003', 'ridgeroad@mail.com', 5),
+        (07,03, 23, '5009097335', '8991 10th Avenue Warwick, RI 02886', 'avenuewarwick@mail.com', 2),
+        (08,03, 29, '2966966254', '48 Ann Street Ft Mitchell, KY 41037', 'streetmitchel@mail.com', 1),
+        (09,03, 18, '9208968883', '750 Augusta St.Troy, NY 12180', 'augusta@mail.com', 2);
+
+-- HOTEL CHAIN 4
+INSERT INTO hotel (hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars) 
+    VALUES 
+        (01,04, 20, '4039522220', '7611 Highland Dr.Mishawaka, IN 46544', 'highland@mail.com', 3),
+        (02,04, 10, '4322825892', '745 Cambridge RoadGoldsboro, NC 27530', 'cambridge@mail.com', 3),
+        (03,04, 15, '5905888458', '108 Washington St.Logansport, IN 46947', 'washington@mail.com', 3),
+        (04,04, 10, '5574078387', '413 Market Dr.Dundalk, MD 21222', 'market@mail.com', 5),
+        (05,04, 18, '2146761030', '9055 Edgefield StreetValdosta, GA 31604', 'edgefield@mail.com', 4),
+        (06,04, 40, '8039610396', '69 Ridge RoadBloomfield, NJ 07003', 'ridgeroad@mail.com', 5),
+        (07,04, 23, '5009097335', '8991 10th Avenue Warwick, RI 02886', 'avenuewarwick@mail.com', 2),
+        (08,04, 29, '2966966254', '48 Ann Street Ft Mitchell, KY 41047', 'streetmitchel@mail.com', 1),
+        (09,04, 18, '9208968883', '750 Augusta St.Troy, NY 12180', 'augusta@mail.com', 2);
+
+-- HOTEL CHAIN 5
+INSERT INTO hotel (hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars) 
+    VALUES 
+        (01,05, 20, '4039522220', '7611 Highland Dr.Mishawaka, IN 46544', 'highland@mail.com', 3),
+        (02,05, 10, '4322825892', '745 Cambridge RoadGoldsboro, NC 27530', 'cambridge@mail.com', 3),
+        (03,05, 15, '5905888458', '108 Washington St.Logansport, IN 46947', 'washington@mail.com', 3),
+        (04,05, 10, '5574078387', '413 Market Dr.Dundalk, MD 21222', 'market@mail.com', 5),
+        (05,05, 18, '2146761030', '9055 Edgefield StreetValdosta, GA 31605', 'edgefield@mail.com', 4),
+        (06,05, 40, '8039610396', '69 Ridge RoadBloomfield, NJ 07003', 'ridgeroad@mail.com', 5),
+        (07,05, 23, '5009097335', '8991 10th Avenue Warwick, RI 02886', 'avenuewarwick@mail.com', 2),
+        (08,05, 29, '2966966254', '48 Ann Street Ft Mitchell, KY 41057', 'streetmitchel@mail.com', 1),
+        (09,05, 18, '9208968883', '750 Augusta St.Troy, NY 12180', 'augusta@mail.com', 2);		
