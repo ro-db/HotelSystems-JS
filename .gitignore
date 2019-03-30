@@ -1,4 +1,8 @@
 node_modules
 .env
 package-lock.json
+<<<<<<< HEAD
 .sql
+=======
+*.swp
+>>>>>>> 2805727d2cf3446ffd5e6768ff60c98d8186e5e9
