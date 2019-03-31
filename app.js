@@ -25,56 +25,28 @@ const initOptions = {
 const pgp = require('pg-promise')(initOptions);
 const db = pgp(connectionSTR);
 
-// Fill DB
-app.get('/fillDB', function(req, res, next) {
-  for (var i = 1; i < 6; i++) {
-    hotelChainID = i;
-    numberOfHotels = Math.floor(Math.random() * 20) + 5;
-    address = faker.address.streetAddress();
-    email = faker.internet.exampleEmail();
-    phoneNumber = faker.phone.phoneNumberFormat().toString();
-
-    list = [hotelChainID, numberOfHotels, address, email, phoneNumber];
-    var queryText = `SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES (${hotelChainID}, ${numberOfHotels}, ${address}, ${email}, ${phoneNumber});`;
-
-    db.none(
-      'INSERT INTO hotel_chain(hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $4, $5);',
-      [hotelChainID, numberOfHotels, address, email, phoneNumber]
-    )
-      .then(console.log('SUCCESSS '))
-      .catch(error => {
-        console.log(error, 'ERROR!!!!!!!!!');
-      });
-
-    console.log(hotelChainID, numberOfHotels, address, email, phoneNumber);
-    console.log(`created hotel chain ${i}`);
-  }
-});
-
 // get employees
 app.get('/employees', function(req, res, next) {
-  client
-    .query('  SELECT * FROM employee;')
-    .then(
-      // result => console.log(result[1].rows),
-      result => res.status(200).send(result[1].rows)
-    )
-    .catch(e => console.error(e.stack))
-    .then(() => client.end())
-    .then(() => console.log('Closed client connection'));
+  db.many(t => {
+    return 'SELECT * FROM employee';
+  })
+    .then(function(data) {
+      console.log(data);
+    })
+    .then(console.log('Retrieved hotels'))
+    .catch(e => console.error(e.stack));
 });
 
 // get hotels
 app.get('/hotels', function(req, res, next) {
-  client
-    .query('SET search_path = "HotelSystem"; SELECT * FROM employee;')
-    .then(
-      // result => console.log(result[1].rows),
-      result => res.status(200).send(result[1].rows)
-    )
-    .catch(e => console.error(e.stack))
-    .then(() => client.end())
-    .then(() => console.log('Closed client connection'));
+  db.many(t => {
+    return 'SELECT * FROM hotel';
+  })
+    .then(function(data) {
+      console.log(data);
+    })
+    .then(console.log('Retrieved hotels'))
+    .catch(e => console.error(e.stack));
 });
 
 // Set app engine
@@ -97,3 +69,15 @@ app.get('/rent', function(req, res) {
 app.listen(PORT, function() {
   console.log(`Server started on port ${PORT}`);
 });
+
+// Inserting example:
+//  db.none(
+//       'INSERT INTO hotel_chain(hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $5);',
+//       [hotelChainID, numberOfHotels, address, email, phoneNumber]
+//     )
+//       .then(() => {
+//         console.log('SUCCESSS');
+//       })
+//       .catch(error => {
+//         console.log(error, 'ERROR!!');
+//       });

@@ -20,17 +20,26 @@ client.connect(err => {
 });
 
 var hotelChains = [],
-  Hotels = [];
+  hotels = [];
 
 function createHotelChains() {
-  var hotelChainID, numberOfHotels, address, email, phoneNumber;
-
-  for (var i = 0; i < 5; i++) {
+  for (var i = 1; i < 6; i++) {
     hotelChainID = i;
     numberOfHotels = Math.floor(Math.random() * 20) + 5;
     address = faker.address.streetAddress();
     email = faker.internet.exampleEmail();
     phoneNumber = faker.phone.phoneNumberFormat().toString();
+
+    db.none(
+      'INSERT INTO hotel_chain(hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $5);',
+      [hotelChainID, numberOfHotels, address, email, phoneNumber]
+    )
+      .then(() => {
+        console.log('SUCCESSS');
+      })
+      .catch(error => {
+        console.log(error, 'ERROR!!');
+      });
 
     hc = new HotelChain(
       hotelChainID,
@@ -41,49 +50,33 @@ function createHotelChains() {
     );
     hotelChains.push(hc);
 
-    var queryText = `SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES (${hotelChainID}, ${numberOfHotels}, ${address}, ${email}, ${phoneNumber});`;
-
-    client.query(
-      "SET search_path = 'HotelSystem'; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES (`${list}`) RETURNING NULL;",
-      (list = [hotelChainID, numberOfHotels, address, email, phoneNumber]),
-      function(err, result) {
-        if (err) {
-          console.log('Error inserting query');
-          console.error(err.stack);
-        }
-      }
-    );
     console.log(hotelChainID, numberOfHotels, address, email, phoneNumber);
-    console.log(list);
     console.log(`created hotel chain ${i}`);
   }
 }
-exports.createHotelChains = function() {};
 
-var hotelChainID, numberOfHotels, address, email, phoneNumber;
-for (var i = 1; i < 6; i++) {
-  hotelChainID = i;
-  numberOfHotels = Math.floor(Math.random() * 20) + 5;
-  address = faker.address.streetAddress();
-  email = faker.internet.exampleEmail();
-  phoneNumber = faker.phone.phoneNumberFormat().toString();
-
-  list = [hotelChainID, numberOfHotels, address, email, phoneNumber];
-  var queryText = `SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES (${hotelChainID}, ${numberOfHotels}, ${address}, ${email}, ${phoneNumber});`;
-
-  db.none('SET search_path = "HotelSystem"')
-    .then(t => {
-      'SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $4, $5);',
-        [hotelChainID, numberOfHotels, address, email, phoneNumber];
-    })
-    .then(t => {
-      console.log('SUCCESSS ');
-    })
-    .catch(error => {
-      console.log('ERROR!!!!!!!!!', error);
-    });
-
-  console.log(queryText);
-  console.log(hotelChainID, numberOfHotels, address, email, phoneNumber);
-  console.log(`created hotel chain ${i}`);
+function createHotels() {
+  for (var i = 1; i < 9; i++) {
+    for (var j = 1; j < 6; j++) hotelID = j;
+    hotelChainID = j;
+    numberOfRooms = Math.floor(Math.random() * 5) + 3;
+    phoneNumber = faker.phone.phoneNumberFormat().toString();
+    address = faker.address.streetAddress();
+    email = faker.internet.exampleEmail();
+    numberOfStars = Math.floor(Math.random() * 3) + 2;
+  }
+  hotel = new Hotel(
+    hotelID,
+    hotelChainID,
+    numberOfRooms,
+    phoneNumber,
+    address,
+    email,
+    numberOfStars
+  );
+  hotels.push(hotel);
 }
+
+function createRooms() {}
+
+exports.createHotelChains = function() {};
