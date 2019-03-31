@@ -4,8 +4,6 @@ require('dotenv').config();
 const pg = require('pg');
 var faker = require('faker');
 
-const pgp = require('pg-promise')();
-
 var engines = require('consolidate');
 
 // Initiate app
@@ -20,50 +18,49 @@ const connectionSTR = {
   password: process.env.password,
   port: process.env.port
 };
+
+const initOptions = {
+  schema: 'HotelSystem'
+};
+const pgp = require('pg-promise')(initOptions);
 const db = pgp(connectionSTR);
 
 // Fill DB
 app.get('/fillDB', function(req, res, next) {
   var hotelChainID, numberOfHotels, address, email, phoneNumber;
-  for (var i = 1; i < 6; i++) {
-    hotelChainID = i;
-    numberOfHotels = Math.floor(Math.random() * 20) + 5;
-    address = faker.address.streetAddress();
-    email = faker.internet.exampleEmail();
-    phoneNumber = faker.phone.phoneNumberFormat().toString();
 
-    list = [hotelChainID, numberOfHotels, address, email, phoneNumber];
-    var queryText = `SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES (${hotelChainID}, ${numberOfHotels}, ${address}, ${email}, ${phoneNumber});`;
-
-    // db.none('SET search_path = "HotelSystem"')
-    //   .then(
-    //     'SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $4, $5);',
-    //     [hotelChainID, numberOfHotels, address, email, phoneNumber]
-    //   )
-    //   .then(t => {
-    //     console.log('SUCCESSS ');
-    //   })
-    //   .catch(error => {
-    //     console.log(error, 'ERROR!!!!!!!!!');
-    //     done();
-    //   });
-
-    db.task(t => {
-      return t.one('SET search_path = "HotelSystem"').then(f => {
-        t.any(
-          'SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $4, $5);',
-          [hotelChainID, numberOfHotels, address, email, phoneNumber]
-        );
-      });
+  db.one(
+    "SELECT table_name FROM information_schema.tables WHERE table_schema='HotelSystem';"
+  )
+    .then(t => {
+      console.log(t);
     })
-      .then(console.log('SUCCESSS '))
-      .catch(error => {
-        console.log(error, 'ERROR!!!!!!!!!');
-      });
+    .catch(error => {
+      console.log(error, 'ERROR!!!!!!!!!');
+    });
 
-    console.log(hotelChainID, numberOfHotels, address, email, phoneNumber);
-    console.log(`created hotel chain ${i}`);
-  }
+  //   for (var i = 1; i < 6; i++) {
+  //     hotelChainID = i;
+  //     numberOfHotels = Math.floor(Math.random() * 20) + 5;
+  //     address = faker.address.streetAddress();
+  //     email = faker.internet.exampleEmail();
+  //     phoneNumber = faker.phone.phoneNumberFormat().toString();
+
+  //     list = [hotelChainID, numberOfHotels, address, email, phoneNumber];
+  //     var queryText = `SET search_path = "HotelSystem"; INSERT INTO hotel_chain (hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES (${hotelChainID}, ${numberOfHotels}, ${address}, ${email}, ${phoneNumber});`;
+
+  //     db.none(
+  //       'INSERT INTO hotel_chain(hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $4, $5);',
+  //       [hotelChainID, numberOfHotels, address, email, phoneNumber]
+  //     )
+  //       .then(console.log('SUCCESSS '))
+  //       .catch(error => {
+  //         console.log(error, 'ERROR!!!!!!!!!');
+  //       });
+
+  //     console.log(hotelChainID, numberOfHotels, address, email, phoneNumber);
+  //     console.log(`created hotel chain ${i}`);
+  //   }
 });
 
 // get employees
