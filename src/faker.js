@@ -1,23 +1,20 @@
 const { Client } = require('pg');
 var faker = require('faker');
 
-// Create client
-const client = new Client({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: process.env.PGPORT
-});
+// Connect to db
+const connectionSTR = {
+  user: process.env.user,
+  host: process.env.host,
+  database: process.env.database,
+  password: process.env.password,
+  port: process.env.port
+};
 
-//Database Client
-client.connect(err => {
-  if (err) {
-    console.error('client connection error', err.stack);
-  } else {
-    console.log('Database connection SUCCESSFUL');
-  }
-});
+const initOptions = {
+  schema: 'HotelSystem'
+};
+const pgp = require('pg-promise')(initOptions);
+const db = pgp(connectionSTR);
 
 var hotelChains = [],
   hotels = [];
@@ -41,14 +38,14 @@ function createHotelChains() {
         console.log(error, 'ERROR!!');
       });
 
-    hc = new HotelChain(
-      hotelChainID,
-      numberOfHotels,
-      address,
-      email,
-      phoneNumber
-    );
-    hotelChains.push(hc);
+    // hc = new HotelChain(
+    //   hotelChainID,
+    //   numberOfHotels,
+    //   address,
+    //   email,
+    //   phoneNumber
+    // );
+    // hotelChains.push(hc);
 
     console.log(hotelChainID, numberOfHotels, address, email, phoneNumber);
     console.log(`created hotel chain ${i}`);
@@ -63,20 +60,38 @@ function createHotels() {
     phoneNumber = faker.phone.phoneNumberFormat().toString();
     address = faker.address.streetAddress();
     email = faker.internet.exampleEmail();
-    numberOfStars = Math.floor(Math.random() * 3) + 2;
+    numberOfStars = Math.floor(Math.random() * 3) + 3;
   }
-  hotel = new Hotel(
-    hotelID,
-    hotelChainID,
-    numberOfRooms,
-    phoneNumber,
-    address,
-    email,
-    numberOfStars
-  );
-  hotels.push(hotel);
+
+  db.none(
+    'INSERT INTO hotel(hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars) VALUES ($1, $2, $3, $4, $5, $6, $7);',
+    [
+      hotelID,
+      hotelChainID,
+      numberOfRooms,
+      phoneNumber,
+      address,
+      email,
+      numberOfStars
+    ]
+  )
+    .then(() => {
+      console.log('SUCCESSS');
+    })
+    .catch(error => {
+      console.log(error, 'ERROR!!');
+    });
+
+  // var hotel = new Hotel(
+  //   hotelID,
+  //   hotelChainID,
+  //   numberOfRooms,
+  //   phoneNumber,
+  //   address,
+  //   email,
+  //   numberOfStars
+  // );
+  // hotels.push(hotel);
 }
-
-function createRooms() {}
-
-exports.createHotelChains = function() {};
+createHotels();
+(module.exports = createHotels()), createHotelChains();

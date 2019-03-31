@@ -11,19 +11,19 @@ const app = express();
 var PORT = process.env.PORT || 3000;
 
 // Create db
-const connectionSTR = {
-  user: process.env.user,
-  host: process.env.host,
-  database: process.env.database,
-  password: process.env.password,
-  port: process.env.port
-};
+// const connectionSTR = {
+//   user: process.env.user,
+//   host: process.env.host,
+//   database: process.env.database,
+//   password: process.env.password,
+//   port: process.env.port
+// };
 
-const initOptions = {
-  schema: 'HotelSystem'
-};
-const pgp = require('pg-promise')(initOptions);
-const db = pgp(connectionSTR);
+// const initOptions = {
+//   schema: 'HotelSystem'
+// };
+// const pgp = require('pg-promise')(initOptions);
+// const db = pgp(connectionSTR);
 
 // get employees
 app.get('/employees', function(req, res, next) {
@@ -69,6 +69,10 @@ app.get('/rent', function(req, res) {
 app.listen(PORT, function() {
   console.log(`Server started on port ${PORT}`);
 });
+
+var creaeHotels = require('./src/faker');
+var createHotelChains = require('./src/faker');
+console.log(creaeHotels);
 
 // Inserting example:
 //  db.none(
