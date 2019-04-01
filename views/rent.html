@@ -3,75 +3,25 @@
   <head>
     <H1>Rent</H1>
     <title>Rent</title>
-    <title>Tiny Date Picker Demo</title>
-    <link rel="stylesheet" href="css/tiny-date-picker.css" />
-    <link rel="stylesheet" href="css/date-range-picker.css" />
-    <link rel="stylesheet" href="css/demo.css" />
-    <link rel="stylesheet" href="public/css/rent.css" />
-  </head>
-  <body>
-    <main>
-      <div class="ex-inputs">
-        <header class="ex-inputs-header">
-          <h3>
-            Date Range Picker Demo
-          </h3>
-          <input class="ex-inputs-start" placeholder="From date" />
-          -
-          <input class="ex-inputs-end" placeholder="To date" />
-        </header>
+  <head>
+  <html>
+      <body>
+          <DatePicker
+            selected={this.state.startDate}
+            selectsStart
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            onChange={this.handleChangeStart}
+          />
 
-        <div class="ex-inputs-picker"></div>
-        <div class="ex-inputs-picker ex-picker-visible">
-          <div class="dr-cals">
-            ::before
-          </div>
-        </div>
-        <script>
-          (function() {
-            const root = document.querySelector('.ex-inputs');
-            const txtStart = root.querySelector('.ex-inputs-start');
-            const txtEnd = root.querySelector('.ex-inputs-end');
-            const container = root.querySelector('.ex-inputs-picker');
+          <DatePicker
+              selected={this.state.endDate}
+              selectsEnd
+              startDate={this.state.startDate}
+              endDate={this.state.endDate}
+              onChange={this.handleChangeEnd}
+          />
 
-            // Inject DateRangePicker into our container
-            DateRangePicker.DateRangePicker(container).on(
-              'statechange',
-              function(_, rp) {
-                // Update the inputs when the state changes
-                var range = rp.state;
-                txtStart.value = range.start ? range.start.toDateString() : '';
-                txtEnd.value = range.end ? range.end.toDateString() : '';
-              }
-            );
-
-            // When the inputs gain focus, show the date range picker
-            txtStart.addEventListener('focus', showPicker);
-            txtEnd.addEventListener('focus', showPicker);
-
-            function showPicker() {
-              container.classList.add('ex-inputs-picker-visible');
-            }
-
-            // If focus leaves the root element, it is not in the date
-            // picker or the inputs, so we should hide the date picker
-            // we do this in a setTimeout because redraws cause temporary
-            // loss of focus.
-            let previousTimeout;
-            root.addEventListener('focusout', function hidePicker() {
-              clearTimeout(previousTimeout);
-              previousTimeout = setTimeout(function() {
-                if (!root.contains(document.activeElement)) {
-                  container.classList.remove('ex-inputs-picker-visible');
-                }
-              }, 10);
-            });
-          })();
-        </script>
-        <!-- <script>
-          src = '/src/calender.js';
-        </script> -->
-      </div>
-    </main>
-  </body>
+      </body>
+    </html>
 </html>

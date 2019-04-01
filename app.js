@@ -70,9 +70,8 @@ app.listen(PORT, function() {
   console.log(`Server started on port ${PORT}`);
 });
 
-var creaeHotels = require('./src/faker');
 var createHotelChains = require('./src/faker');
-console.log(creaeHotels);
+console.log(createHotelChains);
 
 // Inserting example:
 //  db.none(
