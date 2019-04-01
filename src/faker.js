@@ -82,6 +82,9 @@ function createHotels() {
         .catch(error => {
           console.log(error, 'ERROR!!');
         });
+
+      // Add rooms to the current hotel
+      createRooms(numberOfRooms, pk);
     }
     // var hotel = new Hotel(
     //   hotelID,
@@ -94,6 +97,49 @@ function createHotels() {
     // );
     // hotels.push(hotel);
   }
+}
+
+function createRooms(n, hotelID) {
+  // n = number of Rooms
+  var roomNumber,
+    price,
+    amenities,
+    capacity,
+    roomView,
+    extenable,
+    issies,
+    hotelID;
+
+  for (var i = 1; i < n; i++) {
+    roomNumber = i;
+    price = Math.floor(Math.random() * 5) + 100;
+    amenities = faker.lorem.words();
+    capacity = Math.floor(Math.random() * 5) + 3;
+    roomView = faker.lorem.words();
+    extenable = faker.random.boolean();
+    issies = faker.lorem.words();
+    hotelID = hotelID;
+  }
+
+  db.none(
+    'INSERT INTO room(room_number, price, amenities, capacity, room_view, extendable, issues, hotel_id) VALUES ($1, $2, $3, $4, $5, $6, $7,$8);',
+    [
+      roomNumber,
+      price,
+      amenities,
+      capacity,
+      roomView,
+      extenable,
+      issies,
+      hotelID
+    ]
+  )
+    .then(() => {
+      console.log('SUCCESSS: ADDED HOTEL');
+    })
+    .catch(error => {
+      console.log(error, 'ERROR!!');
+    });
 }
 
 createHotels();
