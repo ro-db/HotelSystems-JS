@@ -1,27 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
     <H1>Rent</H1>
     <title>Rent</title>
-  <head>
-  <html>
-      <body>
-          <DatePicker
-            selected={this.state.startDate}
-            selectsStart
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
-            onChange={this.handleChangeStart}
-          />
 
-          <DatePicker
-              selected={this.state.endDate}
-              selectsEnd
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-              onChange={this.handleChangeEnd}
-          />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
-      </body>
-    </html>
+    <link
+      rel="stylesheet"
+      href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"
+    />
+  </head>
+
+  <body>
+    <!--DROP DOWN-->
+    <div class="container">
+      <h3>City where you want to book a hotel:</h3>
+      <div class="dropdown">
+        <button
+          class="btn btn-primary dropdown-toggle"
+          type="button"
+          data-toggle="dropdown"
+          id="citiesDropdown"
+        >
+          Cities <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu"></ul>
+      </div>
+    </div>
+    <!--END DROP DOWN-->
+
+    <h3>
+      Available hotels at this city:
+      <ul>
+        (List of hotels in that city)
+      </ul>
+    </h3>
+
+    <h3>Booking dates:</h3>
+    <label for="start date:">start date:</label>
+    <input type="date" name="startdate" id="startdate" />
+
+    <label for="enddate:">end date:</label>
+    <input type="date" name="enddate" id="enddate" />
+
+    <button type="button" id="submit" value="Submit" onclick="funcSubmit()">
+      Submit
+    </button>
+
+    <script>
+      console.log('RECIEVED');
+
+      var didClickIt = false;
+      document.getElementById('submit').addEventListener('click', function() {
+        // same as onclick, keeps the JS and HTML separate
+        didClickIt = true;
+      });
+
+      setInterval(function() {
+        // this is the closest you get to an infinite loop in JavaScript
+        if (didClickIt) {
+          didClickIt = false;
+          // document.write causes silly problems, do this instead (or better yet, use a library like jQuery to do this stuff for you)
+          var start = document.getElementById('startdate').value;
+          var end = document.getElementById('enddate').value;
+
+          console.log(start);
+          console.log(end);
+
+          //   window.alert('start: ' + start + '\nend: ' + end);
+        }
+      }, 500);
+    </script>
+
+    <!--DROP DOWN SCRIPT-->
+    <script type="javascript" src="/src/middleware.js">
+      cities = getCities();
+      console.log(cities);
+      var dropdown = document.getElementById('citiesDropdown');
+
+      for (var i = 0; i < cities.length; ++i) {
+        addOption(dropdown, cities[i], cities[i]);
+      }
+
+      addOption = function(selectbox, text, value) {
+        var optn = document.createElement('OPTION');
+        optn.text = text;
+        optn.value = value;
+        selectbox.options.add(optn);
+      };
+    </script>
+
+    <!-- <script src="/components/datepicker/dateRangePicker.js"></script> -->
+  </body>
 </html>

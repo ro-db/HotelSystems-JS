@@ -56,9 +56,10 @@ function createHotels(chainID, numOfHotels, hID) {
     email = faker.internet.exampleEmail();
     numberOfStars = Math.floor(Math.random() * 3) + 3;
     hotelID++;
+    city = faker.address.city();
 
     db.none(
-      'INSERT INTO hotel(hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars) VALUES ($1, $2, $3, $4, $5, $6, $7);',
+      'INSERT INTO hotel(hotel_id, hotel_chain_id, number_of_rooms, phone_number, address, email, stars,city) VALUES ($1, $2, $3, $4, $5, $6, $7,$8);',
       [
         hotelID,
         hotelChainID,
@@ -66,7 +67,8 @@ function createHotels(chainID, numOfHotels, hID) {
         phoneNumber,
         address,
         email,
-        numberOfStars
+        numberOfStars,
+        city
       ]
     )
       .catch(error => {
@@ -81,7 +83,8 @@ function createHotels(chainID, numOfHotels, hID) {
           phoneNumber,
           address,
           email,
-          numberOfStars
+          numberOfStars,
+          city
         );
       });
 
@@ -136,3 +139,11 @@ function createRooms(numRooms, hID) {
 createHotelChains();
 
 module.exports = createHotelChains();
+
+db.none('SELECT city FROM hotel;')
+  .catch(error => {
+    console.log(error, 'ERROR: unable to get cities from hotel');
+  })
+  .then(() => {
+    console.log('SUCCESSS: ADDED HOTEL');
+  });

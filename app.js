@@ -1,8 +1,6 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
-const pg = require('pg');
-var faker = require('faker');
 
 var engines = require('consolidate');
 
@@ -65,22 +63,16 @@ app.get('/rent', function(req, res) {
   res.render('rent');
 });
 
+// Completed Booking route
+app.get('/bookingComplete', function(req, res) {
+  res.render('bookingComplete');
+});
+
 // Start server
 app.listen(PORT, function() {
   console.log(`Server started on port ${PORT}`);
 });
 
-var createHotelChains = require('./src/faker');
-console.log(createHotelChains);
-
-// Inserting example:
-//  db.none(
-//       'INSERT INTO hotel_chain(hotel_chain_id, number_of_hotels, address,  email, phone_number) VALUES ($1, $2, $3, $4, $5);',
-//       [hotelChainID, numberOfHotels, address, email, phoneNumber]
-//     )
-//       .then(() => {
-//         console.log('SUCCESSS');
-//       })
-//       .catch(error => {
-//         console.log(error, 'ERROR!!');
-//       });
+// un-comment and run to generate DB:
+// var createHotelChains = require('./src/faker');
+// console.log(createHotelChains);
