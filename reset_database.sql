@@ -1,5 +1,13 @@
 SET search_path = "HotelSystem";
 
+DROP TABLE IF EXISTS hotel_chain CASCADE;
+DROP TABLE IF EXISTS hotel CASCADE;
+DROP TABLE IF EXISTS room CASCADE;
+DROP TABLE IF EXISTS customer CASCADE;
+DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS booking CASCADE;
+DROP TABLE IF EXISTS rental CASCADE;
+
 CREATE TABLE hotel_chain ( hotel_chain_id INT PRIMARY KEY, 
 						  number_of_hotels INT,
 						  address VARCHAR,
