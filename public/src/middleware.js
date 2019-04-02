@@ -32,3 +32,4 @@ function getCities() {
 
 getCities();
 module.exports = getCities();
+

@@ -20,9 +20,12 @@
       rel="stylesheet"
       href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"
     />
+
+    <script type="text/javascript" src="public/src/dropdown.js"></script>
+
   </head>
 
-  <body>
+  <body onLoad="populateCitiesDropdown()">
     <!--DROP DOWN-->
     <div class="container">
       <h3>City where you want to book a hotel:</h3>
@@ -82,25 +85,7 @@
         }
       }, 500);
     </script>
-
-    <!--DROP DOWN SCRIPT-->
-    <script type="javascript" src="/src/middleware.js">
-      cities = getCities();
-      console.log(cities);
-      var dropdown = document.getElementById('citiesDropdown');
-
-      for (var i = 0; i < cities.length; ++i) {
-        addOption(dropdown, cities[i], cities[i]);
-      }
-
-      addOption = function(selectbox, text, value) {
-        var optn = document.createElement('OPTION');
-        optn.text = text;
-        optn.value = value;
-        selectbox.options.add(optn);
-      };
-    </script>
-
-    <!-- <script src="/components/datepicker/dateRangePicker.js"></script> -->
   </body>
+  <!-- <script src="/components/datepicker/dateRangePicker.js"/> -->
 </html>
+

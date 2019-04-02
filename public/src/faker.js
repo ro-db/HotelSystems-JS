@@ -136,14 +136,22 @@ function createRooms(numRooms, hID) {
   }
 }
 
-createHotelChains();
+//createHotelChains();
 
-module.exports = createHotelChains();
+function clearDatabase() {
+  db.none('DELETE FROM hotel_chain; DELETE FROM hotel; DELETE FROM room; DELETE FROM customer; DELETE FROM employee; DELETE FROM booking; DELETE FROM renting;');
+}
 
+module.exports = {
+  clearDatabase: clearDatabase,
+  createHotelChains: createHotelChains,
+}
+/*
 db.none('SELECT city FROM hotel;')
   .catch(error => {
     console.log(error, 'ERROR: unable to get cities from hotel');
   })
   .then(() => {
     console.log('SUCCESSS: ADDED HOTEL');
-  });
+  });*/
+

@@ -51,7 +51,9 @@ app.get('/hotels', function(req, res, next) {
 app.set('views', __dirname + '/views');
 app.engine('html', engines.mustache);
 app.set('view engine', 'html');
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
+
+const faker = require('src/faker.js');
 
 // Home route
 app.get('/', function(req, res) {
@@ -66,6 +68,12 @@ app.get('/rent', function(req, res) {
 // Completed Booking route
 app.get('/bookingComplete', function(req, res) {
   res.render('bookingComplete');
+});
+
+app.get('/generate_database', function(req, res) {
+  faker.clearDatabase();
+  faker.createHotelChains();
+  path.join(__dirname, "/");
 });
 
 // Start server
